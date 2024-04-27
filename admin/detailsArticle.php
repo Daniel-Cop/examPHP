@@ -1,5 +1,5 @@
 <?php 
-if (!isset($_GET["id"])){
+if (!isset($_GET["id"])){ //if id is not set in GET method redirect back to index page
     header("Location: http://localhost/examphp/admin/index.php");
 }
 include_once("../utils/connectionDB.php");

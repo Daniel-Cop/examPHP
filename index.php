@@ -7,7 +7,7 @@ $articles = $db->query('SELECT * FROM annonce ORDER BY datePublication DESC')->f
 
 <div class="container">
 
-    <h1 class="text-center m-5"><?php echo ($title ?? "Default Title") ?></h1>
+    <h1 class="text-center m-5"><?php echo ($title ?? "Default Title") ?> News</h1>
     <h2 class="">Articles</h2>
 
 </div>

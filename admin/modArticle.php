@@ -11,6 +11,7 @@
         $title = $article["titre"];
         include_once("../block/header.php");
         include_once("../block/navbar.php");
+        $errors=[];
 
         if($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["titre"], $_POST["auteur"], $_POST["contenu"])){
 
@@ -29,14 +30,13 @@
                         $uniqueName = $imgName."-".uniqid().".".$extension;
                         $_FILES["imageUrl"]["name"] = $uniqueName;
                         $targetFile = $targetDirectory.basename($_FILES["imageUrl"]["name"]);
-                        unlink("../".$article["imageUrl"]); // delete old image
+                        unlink("../".$article["imageUrl"]); // if every check is passed the old image get deleted and the new one replace it
                         move_uploaded_file($_FILES['imageUrl']['tmp_name'], "../".$targetFile);
-                        echo ("L'envoi a bien été effectué !");
                     } else {
-                        echo('J\'accepte que les images ...');
+                        $errors["img"] = 'j\'accepte pas cette format.';
                     }
                 } else {
-                    echo('Le fichier est trop lourd pour un petit serveur ... ');
+                    $errors["img"] = 'le fichier est trop lourd pour un petit serveur. ';
                 }
             }
 
@@ -48,11 +48,23 @@
                 ":imageUrl" => $targetFile,
                 ":id" => $_GET["id"]
             ]);
-            header("Location: http://localhost/examphp/admin/detailsArticle.php?id=".$_GET["id"]);
         }
 ?>
 <a class="position-absolute m-5 text-decoration-none text-light rounded btn bg-secondary" href="detailsArticle.php?id=<?php echo($article["id"]) ?>">< Retour</a>
 <h1 class="text-center m-5">Modification article <br>"<span class="fw-bold"><?php echo($article["titre"]) ?></span>"</h1>
+
+<?php if($_SERVER["REQUEST_METHOD"] === "POST"){
+
+        if(isset($errors["img"])) { // if an error occured on the image upload show the message, else just redirect to the details page.
+    ?>
+    <p class="text-center text-danger m-5">Erreur lors du téléchargement de l'image, <?php echo($errors["img"]) ?> Le reste des changements a été appliqué.</p>
+    <?php
+        } else {
+            header("Location: http://localhost/examphp/admin/detailsArticle.php?id=".$_GET["id"]);
+        }
+}
+?>
+
 <form action="modArticle.php?id=<?php echo($article["id"]) ?>" method="POST" enctype="multipart/form-data" class="d-flex flex-column justify-content-center align-items-center">
     <div calss="m-3">
         <label for="titre" class="fs-4 fw-bold"> Titre :</label>

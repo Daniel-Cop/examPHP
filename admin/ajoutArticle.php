@@ -27,12 +27,11 @@
                         $targetFile = $targetDirectory.basename($_FILES["image"]["name"]);
 
                         move_uploaded_file($_FILES['image']['tmp_name'], "../".$targetFile);
-                        echo ("L'envoi a bien été effectué !");
                     } else {
-                        echo('J\'accepte que les images ...');
+                        $errors["img"] = 'j\'accepte pas cette format.';
                     }
                 } else {
-                    echo('Le fichier est trop lourd pour un petit serveur ... ');
+                    $errors["img"] = 'le fichier est trop lourd pour un petit serveur.';
                 }
             }
 
@@ -44,15 +43,24 @@
             ":contenu" => $_POST["contenu"],
             ":imageUrl" => $targetFile
          ]);
-         header("Location: http://localhost/examphp/admin/index.php");
-    } else {
-        $errors['global'] = "Un des champs obligatoires n'a pas été rempli.";
     }
 ?>
 <a class="position-absolute m-5 text-decoration-none text-light rounded btn bg-secondary" href="index.php">< Retour</a>
 <div class="container d-flex flex-column justify-content-center align-items-center">
 
     <h1 class="text-center m-5"><?php echo ($title ?? "Default Title") ?></h1>
+
+    <?php if($_SERVER["REQUEST_METHOD"] === "POST"){
+
+        if(isset($errors["img"])) { // if an error occured on the image upload show the message, else just redirect to the index.
+    ?>
+        <p class="text-center text-danger m-5">Erreur lors du téléchargement de l'image, <?php echo($errors["img"]) ?> L'article a été créé sans image. Pour en ajouter un, rendez-vous sur la page d'édition de l'article.</p>
+    <?php
+        } else {
+            header("Location: http://localhost/examphp/admin/index.php");
+        }   
+    }
+    ?>
 
     <form action="ajoutArticle.php" method="POST" enctype="multipart/form-data" class="d-flex flex-column justify-content-center align-items-center">
         <div class="m-3">

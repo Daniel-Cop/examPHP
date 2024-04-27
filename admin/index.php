@@ -38,7 +38,7 @@
                    <?php echo($description." ...") ?>
                 </div>
                 <div class="m-2 d-flex justify-content-end">
-                   <a class="rounded bg-primary text-light text-decoration-none p-2 m-2" href="detailsArticle.php?id=<?php echo($article["id"]) ?>">Lire plus</a>
+                   <a class="rounded bg-primary text-light text-decoration-none p-2 m-2" href="detailsArticle.php?id=<?php echo($article["id"]) ?>">Modifier</a>
                 </div>
             </div>
         </div>
